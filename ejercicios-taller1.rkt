@@ -75,6 +75,21 @@
       )
   ))
 
+;;5.
+;;Función: list-index
+(define list-index
+  (lambda (P L)
+    (letrec ((list-index-helper
+              (lambda (L index)
+                (cond
+                  [(null? L) #f]
+                  [(P (car L)) index]
+                  [else (list-index-helper (cdr L) (+ index 1))]
+                ))))
+      (list-index-helper L 0)
+    )
+  ))
+
 ;: 6.
 ;; Función: swapper
 ;; Proposito: Recibe una lista de elementos, y dos elementos, realiza el recorrido de toda la lista, retorna una nueva lista similar modificada, poniendo e2 donde encuentra e1 y viceversa.
@@ -110,6 +125,28 @@
       )
     )
   )
+
+;;8.
+;;Función: mapping
+(define mapping
+  (lambda (F L1 L2)
+    (define (helper L1 L2)
+      (cond
+        [(or (null? L1) (null? L2)) '()]
+        [(= (F (car L1)) (car L2))
+         (cons (list (car L1) (car L2))
+               (helper (cdr L1) (cdr L2)))]
+        [else (helper (cdr L1) (cdr L2))]
+        )
+      )
+    (helper L1 L2)
+    )
+  )
+
+
+
+
+
 ;;--------------------------------------------------------------------
 ;; 9.
 (define inversions
@@ -134,6 +171,16 @@
       )
   )
 ;;--------------------------------------------------------------------
+;; 11.
+(define zip
+  (lambda (F L1 L2)
+    (if (null? L1)
+        '()
+        (cons (F (car L1) (car L2))
+              (zip F (cdr L1) (cdr L2))))))
+
+
+;;--------------------------------------------------------------------
 ;; 12.
 (define filter-acum
   (lambda (a b f acum filter)
@@ -144,6 +191,25 @@
       )
     )
   )
+
+;;---------------------------------------------------------------------
+;;14.
+(define path
+  (lambda (n BST)
+    (define path-helper
+      (lambda (current-path current-node)
+        (cond
+          ((null? current-node) '())
+          ((= n (car current-node)) current-path)
+          ((< n (car current-node))
+           (path-helper (append current-path '("left")) (cadr current-node)))
+          (else
+           (path-helper (append current-path '("right")) (caddr current-node)))
+          )))
+    (path-helper '() BST)
+    )
+  )
+
 
 ;;---------------------------------------------------------------------
 ;;15.
@@ -204,4 +270,3 @@
       )
     )
   )
-
